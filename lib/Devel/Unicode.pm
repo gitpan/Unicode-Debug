@@ -1,16 +1,22 @@
 package Devel::Unicode;
 
+use 5.008001;
+use strict;
+use warnings;
+use utf8;
+
 use Unicode::Debug;
 
 BEGIN
 {
 	$Devel::Unicode::AUTHORITY = 'cpan:TOBYINK';
-	$Devel::Unicode::VERSION   = '0.001';
+	$Devel::Unicode::VERSION   = '0.002';
 }
 
-sub DB::DB { 1 }
+*DB::DB = sub { 1 } unless UNIVERSAL::can('DB', 'can') && DB->can('DB');
 
-sub import {
+sub import
+{
 	my $class = shift;
 	my $args  = join q(,), @_;
 	
@@ -22,6 +28,10 @@ sub import {
 
 __PACKAGE__
 __END__
+
+=pod
+
+=encoding utf8
 
 =head1 NAME
 
@@ -49,7 +59,7 @@ Toby Inkster E<lt>tobyink@cpan.orgE<gt>.
 
 =head1 COPYRIGHT AND LICENCE
 
-This software is copyright (c) 2012 by Toby Inkster.
+This software is copyright (c) 2012-2013 by Toby Inkster.
 
 This is free software; you can redistribute it and/or modify it under
 the same terms as the Perl 5 programming language system itself.

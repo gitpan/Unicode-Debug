@@ -1,6 +1,6 @@
 package PerlIO::via::UnicodeDebug;
 
-use 5.010;
+use 5.008001;
 use strict;
 use warnings;
 use utf8;
@@ -10,7 +10,7 @@ use Unicode::Debug 'unidecode';
 BEGIN
 {
 	$PerlIO::via::UnicodeDebug::AUTHORITY = 'cpan:TOBYINK';
-	$PerlIO::via::UnicodeDebug::VERSION   = '0.001';
+	$PerlIO::via::UnicodeDebug::VERSION   = '0.002';
 }
 
 sub PUSHED
@@ -35,6 +35,8 @@ sub WRITE
 __PACKAGE__
 __END__
 
+=pod
+
 =encoding utf8
 
 =head1 NAME
@@ -43,11 +45,26 @@ PerlIO::via::UnicodeDebug - debug Unicode input/output
 
 =head1 SYNOPSIS
 
- use 5.010;
  use Unicode::Debug;
  binmode STDOUT, ':via(UnicodeDebug)' or die $!;
  
- say "Héllò Wörld";
+ print "Héllò Wörld\n";
+
+Or perhaps in your test suite...
+
+ use strict;
+ use warnings;
+ use utf8;
+ use Test::More;
+ 
+ if (eval { require Unicode::Debug })
+ {
+    my $builder = Test::More->builder;
+    binmode $builder->$_, ':via(UnicodeDebug)'
+       for qw/ output failure_output todo_output /;
+ }
+ 
+ ...;   # Unicode-emitting tests go here
 
 =head1 DESCRIPTION
 
@@ -79,7 +96,7 @@ Toby Inkster E<lt>tobyink@cpan.orgE<gt>.
 
 =head1 COPYRIGHT AND LICENCE
 
-This software is copyright (c) 2012 by Toby Inkster.
+This software is copyright (c) 2012-2013 by Toby Inkster.
 
 This is free software; you can redistribute it and/or modify it under
 the same terms as the Perl 5 programming language system itself.
